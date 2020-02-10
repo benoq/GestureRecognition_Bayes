@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/mouse_gesture_recognition_using_hidden_markov_model_hmm_code_eclipse_project/src/com/gt/UI/run.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.gt.UI.run"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="mouse_gesture_recognition_using_hidden_markov_model_hmm_code_eclipse_project"/>
+</launchConfiguration>
