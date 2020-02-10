@@ -17,7 +17,7 @@ import com.gt.db.ObjectIOFileDataBase;
 import com.gt.gesture.features.GestureFeature;
 import com.gt.gesture.features.GestureFeatureExtractor;
 import com.gt.gesture.features.RawFeature;
-import com.gt.hmm.HiddenMarkov;
+import com.gt.hmm.Bayes;
 import com.gt.hmm.classify.vq.Codebook;
 import com.gt.hmm.classify.vq.Points;
 
@@ -79,10 +79,10 @@ public class OperationMediator {
 		Points[] pts = getPointsFromFeatureVector(gestureFeatures);
 		int[] quantized = codebook.quantize(pts);
 		String[] regGestures = readRegGestureModels();
-		HiddenMarkov[] hmms = new HiddenMarkov[regGestures.length];
+		Bayes[] hmms = new Bayes[regGestures.length];
 		// read hmms
 		for (int i = 0; i < hmms.length; i++) {
-			hmms[i] = new HiddenMarkov(regGestures[i]);
+			hmms[i] = new Bayes(regGestures[i]);
 		}
 		// find likelihood by viterbi decoding of quantized seq
 		double[] likelihoods = new double[regGestures.length];
@@ -163,7 +163,7 @@ public class OperationMediator {
 		Model[][] regModels = database.readAllDataofCurrentMode();
 		String[] gestName = database.getRegisteredModelNames();
 		int quantizedSeq[][];
-		HiddenMarkov mkv = new HiddenMarkov(NUM_STATES, NUM_SYMBOLS);
+		Bayes mkv = new Bayes(NUM_STATES, NUM_SYMBOLS);
 		// for each gesture
 		for (int i = 0; i < regModels.length; i++) {
 			operationSuccess = false;

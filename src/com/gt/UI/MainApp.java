@@ -1,10 +1,4 @@
-/*
-  Please feel free to use/modify this class. 
-  If you give me credit by keeping this information or
-  by sending me an email before using it or by reporting bugs , i will be happy.
-  Email : gtiwari333@gmail.com,
-  Blog : http://ganeshtiwaridotcomdotnp.blogspot.com/ 
- */
+
 package com.gt.UI;
 
 import javax.swing.SwingUtilities;
@@ -22,9 +16,16 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import com.gt.gesture.features.RawFeature;
 import com.gt.gesture.mouseCapture.DataCapturePanel;
 import com.gt.gesture.proxy.OperationMediator;
+
+import thingsToPackIntoConfiguration.Constants_Config;
+
 import java.awt.Font;
 
 public class MainApp extends JFrame {
@@ -41,11 +42,32 @@ public class MainApp extends JFrame {
 	DataCapturePanel dcpCapture;
 	DataCapturePanel dcpDataEditor;
 	OperationMediator oprMed = new OperationMediator();
+	
+	//Bedienelemente
+	JButton btnReplay_Verify;
+	JButton verify_Btn;
+	JButton recognizeBtn;
+	JComboBox registeredModelCMB;	
+	
 	// ********** Functions, listeners...//
+	
+	ChangeListener changeListener_tabs = new ChangeListener() {
+		
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			System.out.println("tab switched");
+			clearGuiFields();
+		}
+	};
+	
+	
 	ActionListener capture_alBtns = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+
+			clearGuiFields();
+			
 			if (e.getSource() == btnAddNewGesture) {
 				// check for existence
 				String newGest = newGestureTXTFLD.getText();
@@ -67,6 +89,7 @@ public class MainApp extends JFrame {
 			}
 		}
 	};
+	
 	ActionListener verify_alBtns = new ActionListener() {
 
 		@Override
@@ -90,9 +113,8 @@ public class MainApp extends JFrame {
 			}
 			if (e.getSource() == recognizeBtn) {
 				String recGest = oprMed.recognizeGesture(dcpVerify.getCapturedRawFeature());
-				status.setText("Best Match Gesture  " + recGest);
+				status.setText("Gesture matches best the following:  " + recGest);
 			}
-
 		}
 	};
 
@@ -137,10 +159,14 @@ public class MainApp extends JFrame {
 			JTabbedPane mainTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			mainTabbedPane.setBounds(10, 29, 606, 331);
 			jContentPane.add(mainTabbedPane);
-			mainTabbedPane.addTab("Verify", null, getVerifyPanel(), null);
+			
 			mainTabbedPane.addTab("Add/Capture", null, getCapturePanel(), null);
+			mainTabbedPane.addTab("Verify", null, getVerifyPanel(), null);
 			mainTabbedPane.addTab("Train", null, getTrainPanel(), null);
-			// mainTabbedPane.addTab("Train Data Editor", null,
+			
+			mainTabbedPane.addChangeListener(changeListener_tabs);
+			mainTabbedPane.setSelectedIndex(1);
+			
 			// getTrainTestDataEditorPanel(), null);
 			jContentPane.add(getStatusLabel());
 			jContentPane.add(getAboutLabel());
@@ -164,16 +190,11 @@ public class MainApp extends JFrame {
 
 	private JLabel getAboutLabel() {
 		if (about == null) {
-			about = new JLabel("Developed By Ganesh Tiwari");
+			about = new JLabel("BetaVersion");
 			about.setBounds(10, 392, 606, 14);
 		}
 		return about;
 	}
-
-	JButton btnReplay_Verify;
-	JButton verify_Btn;
-	JButton recognizeBtn;
-	JComboBox registeredModelCMB;
 
 	private JPanel getVerifyPanel() {
 		if (verifyPanel == null) {
@@ -192,7 +213,7 @@ public class MainApp extends JFrame {
 			verifyPanel.add(verify_Btn);
 
 			recognizeBtn = new JButton("Recognize");
-			recognizeBtn.setBounds(502, 235, 89, 23);
+			recognizeBtn.setBounds(455, 30, 89, 23);
 			recognizeBtn.addActionListener(verify_alBtns);
 			verifyPanel.add(recognizeBtn);
 
@@ -204,6 +225,7 @@ public class MainApp extends JFrame {
 			JLabel lblTrainedModels = new JLabel("Trained Models");
 			lblTrainedModels.setBounds(455, 143, 108, 14);
 			verifyPanel.add(lblTrainedModels);
+			verifyPanel.add(getDCPVerify(), null);
 
 		}
 		return verifyPanel;
@@ -221,8 +243,9 @@ public class MainApp extends JFrame {
 			capturePanel.setLayout(null);
 			capturePanel.add(getDCPCapture());
 
-			JLabel lblNewGesture = new JLabel("Add New Gesture");
+			JLabel lblNewGesture = new JLabel("Name for new Gesture");
 			lblNewGesture.setBounds(455, 33, 86, 14);
+			lblNewGesture.setFont(Constants_Config.FONT_NORMAL);
 			capturePanel.add(lblNewGesture);
 
 			newGestureTXTFLD = new JTextField();
@@ -254,7 +277,7 @@ public class MainApp extends JFrame {
 			btnReplay_Capture.setBounds(502, 232, 89, 23);
 			btnReplay_Capture.addActionListener(capture_alBtns);
 			capturePanel.add(btnReplay_Capture);
-			verifyPanel.add(getDCPVerify(), null);
+			
 		}
 		return capturePanel;
 	}
@@ -360,18 +383,40 @@ public class MainApp extends JFrame {
 	 */
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e1) {
+//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			try {
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedLookAndFeelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println(e1.toString());
 		}
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				MainApp thisClass = new MainApp();
 				thisClass.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				thisClass.setTitle("Mouse Gesture Test Application");
+				thisClass.setTitle("Bayes");
 				thisClass.setVisible(true);
 				thisClass.setResizable(false);
 			}
 		});
+	}
+	
+	private void clearGuiFields() {
+		//clear status message
+		if (this.status != null) {
+			this.status.setText("");
+		}
 	}
 }

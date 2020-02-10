@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 
 import com.gt.gesture.features.RawFeature;
 
+import thingsToPackIntoConfiguration.Constants_Config;
+
 /**
  * 
  * @author Ganesh
@@ -32,7 +34,7 @@ public class DataCapturePanel extends JPanel implements MouseMotionListener, Mou
 	private static final long serialVersionUID = 8652574423524244194L;
 	private final int RADIUS = 5;
 	private boolean drawingStarted = false;
-	private Color BGCOLOR = Color.PINK;
+//	private Color BGCOLOR = Color.PINK;
 	private final int MIN_POINTS = 10;
 	private Vector<Double> rf_curTime;
 	private Vector<Point> rf_drawPoint;
@@ -41,7 +43,7 @@ public class DataCapturePanel extends JPanel implements MouseMotionListener, Mou
 	 * Constructor
 	 */
 	public DataCapturePanel() {
-		setBackground(BGCOLOR);
+		setBackground(Constants_Config.CapturePanelBackground);
 		addMouseMotionListener(this);
 		addMouseListener(this);
 		rf_curTime = new Vector<Double>();
@@ -126,10 +128,10 @@ public class DataCapturePanel extends JPanel implements MouseMotionListener, Mou
 	public void mousePressed(MouseEvent e) {
 		// started
 		drawingStarted = true;
-		this.setBackground(BGCOLOR);
+//		this.setBackground(BGCOLOR);
 		rf_curTime.clear();
 		rf_drawPoint.clear();
-		System.out.println("mouse pressed");
+//		System.out.println("mouse pressed");
 	}
 
 	@Override
