@@ -1,20 +1,22 @@
 
 package com.gt.UI;
 
-import javax.swing.SwingUtilities;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-import javax.swing.JLabel;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JTextField;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
@@ -25,8 +27,6 @@ import com.gt.gesture.mouseCapture.DataCapturePanel;
 import com.gt.gesture.proxy.OperationMediator;
 
 import thingsToPackIntoConfiguration.Constants_Config;
-
-import java.awt.Font;
 
 public class MainApp extends JFrame {
 
@@ -42,32 +42,34 @@ public class MainApp extends JFrame {
 	DataCapturePanel dcpCapture;
 	DataCapturePanel dcpDataEditor;
 	OperationMediator oprMed = new OperationMediator();
-	
-	//Bedienelemente
+
+	// Bedienelemente
 	JButton btnReplay_Verify;
 	JButton verify_Btn;
 	JButton recognizeBtn;
-	JComboBox registeredModelCMB;	
-	
+	JComboBox registeredModelCMB;
+
+	// Functional Sections
+	FunctionalSection fs_verify = new FunctionalSection();
+
 	// ********** Functions, listeners...//
-	
+
 	ChangeListener changeListener_tabs = new ChangeListener() {
-		
+
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			System.out.println("tab switched");
 			clearGuiFields();
 		}
 	};
-	
-	
+
 	ActionListener capture_alBtns = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			clearGuiFields();
-			
+
 			if (e.getSource() == btnAddNewGesture) {
 				// check for existence
 				String newGest = newGestureTXTFLD.getText();
@@ -78,7 +80,8 @@ public class MainApp extends JFrame {
 						break;
 					}
 				}
-				if (!contains) captureDataCMB.addItem(newGestureTXTFLD.getText());
+				if (!contains)
+					captureDataCMB.addItem(newGestureTXTFLD.getText());
 				newGestureTXTFLD.setText("");
 			}
 			if (e.getSource() == btnSaveGestureRawTrainData) {
@@ -89,29 +92,42 @@ public class MainApp extends JFrame {
 			}
 		}
 	};
-	
+
 	ActionListener verify_alBtns = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			JButton source_button = new JButton(); 
+			JComponent test = new JComponent() {
+			};
+			if (e.getSource() instanceof JButton) {
+				source_button = (JButton) e.getSource();
+				test = (JComponent) e.getSource();
+			}
+			
+			System.out.println(test);
+			System.out.println("source: " + source_button);
+			
+			
 			if (e.getSource() == btnSaveGestureRawTrainData) {
 				oprMed.saveCaptured(dcpVerify.getCapturedRawFeature(), captureDataCMB.getSelectedItem().toString());
 			}
 			if (e.getSource() == btnReplay_Verify) {
 				replayCaptured(getDCPVerify());
 			}
-			if (e.getSource() == verify_Btn) {
-				boolean res = oprMed.verify(registeredModelCMB.getSelectedItem().toString(), dcpVerify.getCapturedRawFeature());
+			if (e.getSource() == btnReplay_Verify) {// fs_verify.getjPanel().getComponent(2)) { // getComponent is very
+													// unreliable... search for a smarter way
+				boolean res = oprMed.verify(registeredModelCMB.getSelectedItem().toString(),
+						dcpVerify.getCapturedRawFeature());
 				if (res) {
 					// verified
 					status.setText("Verified   " + registeredModelCMB.getSelectedItem().toString());
-				}
-				else {
+				} else {
 					// not verified
 					status.setText("Not Verified   " + registeredModelCMB.getSelectedItem().toString());
 				}
 			}
-			if (e.getSource() == recognizeBtn) {
+			if (source_button.getText().equals("Recognize")) {
 				String recGest = oprMed.recognizeGesture(dcpVerify.getCapturedRawFeature());
 				status.setText("Gesture matches best the following:  " + recGest);
 			}
@@ -159,14 +175,15 @@ public class MainApp extends JFrame {
 			JTabbedPane mainTabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			mainTabbedPane.setBounds(10, 29, 606, 331);
 			jContentPane.add(mainTabbedPane);
-			
+
 			mainTabbedPane.addTab("Add/Capture", null, getCapturePanel(), null);
-			mainTabbedPane.addTab("Verify", null, getVerifyPanel(), null);
+//			mainTabbedPane.addTab("Verify", null, getVerifyPanel());
+			mainTabbedPane.addTab("Verify", null, fs_verify.bringVerifyPanel(verifyPanel, verify_alBtns, getDCPVerify(), oprMed), null);
 			mainTabbedPane.addTab("Train", null, getTrainPanel(), null);
-			
+
 			mainTabbedPane.addChangeListener(changeListener_tabs);
 			mainTabbedPane.setSelectedIndex(1);
-			
+
 			// getTrainTestDataEditorPanel(), null);
 			jContentPane.add(getStatusLabel());
 			jContentPane.add(getAboutLabel());
@@ -277,7 +294,7 @@ public class MainApp extends JFrame {
 			btnReplay_Capture.setBounds(502, 232, 89, 23);
 			btnReplay_Capture.addActionListener(capture_alBtns);
 			capturePanel.add(btnReplay_Capture);
-			
+
 		}
 		return capturePanel;
 	}
@@ -412,9 +429,9 @@ public class MainApp extends JFrame {
 			}
 		});
 	}
-	
+
 	private void clearGuiFields() {
-		//clear status message
+		// clear status message
 		if (this.status != null) {
 			this.status.setText("");
 		}

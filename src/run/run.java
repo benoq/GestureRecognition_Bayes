@@ -1,4 +1,6 @@
-package com.gt.UI;
+package run;
+
+import com.gt.UI.MainApp;
 
 public class run {
 	

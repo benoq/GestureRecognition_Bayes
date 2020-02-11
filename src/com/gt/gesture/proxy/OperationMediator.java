@@ -91,7 +91,7 @@ public class OperationMediator {
 		}
 		// find the largest likelihood
 		double highest = Double.NEGATIVE_INFINITY;
-		int wordIndex = -1;
+		int wordIndex = -1;  
 		for (int j = 0; j < regGestures.length; j++) {
 			if (likelihoods[j] > highest) {
 				highest = likelihoods[j];
