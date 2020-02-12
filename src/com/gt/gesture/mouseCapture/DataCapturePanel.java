@@ -146,17 +146,6 @@ public class DataCapturePanel extends JPanel implements MouseMotionListener, Mou
 		setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 	}
 
-	// ** FOR TESTING **//
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setTitle("MouseTest");
-		frame.setSize(300, 200);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Container contentPane = frame.getContentPane();
-		contentPane.add(new DataCapturePanel());
-		frame.setVisible(true);
-	}
-
 	public RawFeature getCapturedRawFeature() {
 		// convert to double FRM Double
 		RawFeature rf = new RawFeature();

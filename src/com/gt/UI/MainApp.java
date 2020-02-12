@@ -130,6 +130,9 @@ public class MainApp extends JFrame {
 			if (source_button.getText().equals("Recognize")) {
 				String recGest = oprMed.recognizeGesture(dcpVerify.getCapturedRawFeature());
 				status.setText("Gesture matches best the following:  " + recGest);
+				
+				//TODO @beng: maybe place the sonification call on a more adequate place; this is just "get it somehow done" solution 
+				
 			}
 		}
 	};

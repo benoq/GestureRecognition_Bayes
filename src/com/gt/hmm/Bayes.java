@@ -71,7 +71,7 @@ public class Bayes {
 	/**
 	 * minimum probability
 	 */
-	final double MIN_PROBABILITY = 0.00000000001;
+	final double MIN_PROBABILITY = 0.00000000001;   // @beng: change parameter in order to change the definition of 'similarity'
 	// final double MIN_PROBABILITY = 0.00001;
 	/**
 	 * length of observation sequence
