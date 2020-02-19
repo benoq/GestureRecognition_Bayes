@@ -10,4 +10,5 @@ module q {
 	exports com.gt.gesture.features;
 
 	requires java.desktop;
+	requires javafx.media;
 }

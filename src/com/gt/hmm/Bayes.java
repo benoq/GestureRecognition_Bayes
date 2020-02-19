@@ -71,7 +71,10 @@ public class Bayes {
 	/**
 	 * minimum probability
 	 */
-	final double MIN_PROBABILITY = 0.00000000001;   // @beng: change parameter in order to change the definition of 'similarity'
+	final double MIN_PROBABILITY = 0.00000000001;   // @beng: change parameter in order to change the definition of 'similarity' ; 
+	  //checkout https://www.youtube.com/watch?v=mHEKZ8jv2SY -> the longer the signalSequence is, the lower the minProbability should be
+	  //to lower the the length of the signalSequence, we can make make the period between messurements bigger. As we don't want analyse any cryptic gestures, most of the time jsut a straight line, enlarging the period between points of messuring seems viable. -> as the timing of incoming awt events is currently the the ryhthem of messurements, consider creating a own "update/timer" class like in games, to influence the ryhthem yourself.
+	
 	// final double MIN_PROBABILITY = 0.00001;
 	/**
 	 * length of observation sequence

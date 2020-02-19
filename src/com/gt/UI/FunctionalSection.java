@@ -3,6 +3,7 @@ package com.gt.UI;
 import java.awt.event.ActionListener;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -14,7 +15,7 @@ import com.gt.gesture.proxy.OperationMediator;
 public class FunctionalSection {
 	
 	private JPanel jPanel;
-	
+
 	public JPanel getjPanel() {
 		return jPanel;
 	}
@@ -60,6 +61,37 @@ public class FunctionalSection {
 		
 		pPanel = jPanel;  // TODO check if this double safety is necessary or if the check for existing Panels can be skipped
 		return jPanel;
+	}
+	
+	public JPanel bringPanel_permanentRecognition(JPanel pPanel, ActionListener pActionListner, DataCapturePanel pDCP, OperationMediator pOM) {
+		if (jPanel == null && pPanel == null) {
+
+			JPanel panel_permRec = new JPanel();
+			
+			JButton btn_test = new JButton("test");
+			btn_test.setBounds(700, 200, 120, 23);
+			btn_test.addActionListener(pActionListner);
+			
+			//add elements 
+			panel_permRec.add(pDCP);
+			panel_permRec.add(btn_test);
+			
+			jPanel = panel_permRec;
+		}
+     
+		return jPanel;
+	}
+	
+	/** Returns an ImageIcon, or null if the path was invalid. */ //copied from https://docs.oracle.com/javase/tutorial/uiswing/components/icon.html
+	public ImageIcon createImageIcon(String path,
+	                                           String description) {
+	    
+	    if (path != null) {
+	        return new ImageIcon(path, description);
+	    } else {
+	        System.err.println("Couldn't find file: " + path);
+	        return null;
+	    }
 	}
 
 }

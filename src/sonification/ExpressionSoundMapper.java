@@ -22,4 +22,10 @@ public class ExpressionSoundMapper {
 		return soundURL;
 	}
 	
+	public URL mapGestureToSound(String gestureName) {
+	    URL soundURL = null;
+	    
+	    return soundURL;
+	}
+	
 }

@@ -5,8 +5,11 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -26,6 +29,7 @@ import com.gt.gesture.features.RawFeature;
 import com.gt.gesture.mouseCapture.DataCapturePanel;
 import com.gt.gesture.proxy.OperationMediator;
 
+import sonification.SonificationService;
 import thingsToPackIntoConfiguration.Constants_Config;
 
 public class MainApp extends JFrame {
@@ -37,10 +41,12 @@ public class MainApp extends JFrame {
 	private JPanel verifyPanel;
 	private JPanel capturePanel;
 	private JPanel trainPanel;
+	private JPanel permanentRecognitionPanel;
 	JPanel trainTestDataEditorPanel;
 	DataCapturePanel dcpVerify;
 	DataCapturePanel dcpCapture;
 	DataCapturePanel dcpDataEditor;
+	DataCapturePanel dcp_permanentRecognition;
 	OperationMediator oprMed = new OperationMediator();
 
 	// Bedienelemente
@@ -49,8 +55,11 @@ public class MainApp extends JFrame {
 	JButton recognizeBtn;
 	JComboBox registeredModelCMB;
 
-	// Functional Sections
-	FunctionalSection fs_verify = new FunctionalSection();
+	// gui elements
+	FunctionalSection member_fs = new FunctionalSection();
+	FunctionalSection fs_permanent = new FunctionalSection();
+	DesignElement member_design = new DesignElement();
+	
 
 	// ********** Functions, listeners...//
 
@@ -108,7 +117,6 @@ public class MainApp extends JFrame {
 			System.out.println(test);
 			System.out.println("source: " + source_button);
 			
-			
 			if (e.getSource() == btnSaveGestureRawTrainData) {
 				oprMed.saveCaptured(dcpVerify.getCapturedRawFeature(), captureDataCMB.getSelectedItem().toString());
 			}
@@ -127,12 +135,19 @@ public class MainApp extends JFrame {
 					status.setText("Not Verified   " + registeredModelCMB.getSelectedItem().toString());
 				}
 			}
-			if (source_button.getText().equals("Recognize")) {
+			if (source_button.getText().equals("Recognize")) {  //here: buttonMapping between JPanels via String checking of ButtonText <- Improve
 				String recGest = oprMed.recognizeGesture(dcpVerify.getCapturedRawFeature());
-				status.setText("Gesture matches best the following:  " + recGest);
+				status.setText("Gesture matches best the following: " + recGest);
 				
 				//TODO @beng: maybe place the sonification call on a more adequate place; this is just "get it somehow done" solution 
-				
+				SonificationService sonaService = new SonificationService();
+			
+				try {
+					sonaService.playSoundForGesture(recGest);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 	};
@@ -171,6 +186,8 @@ public class MainApp extends JFrame {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJContentPane() {
+//		Icon icon_hand = member_fs.createImageIcon(Constants_Config.pathForVisualFile_Hand, "icon description"); 
+		
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
@@ -181,8 +198,10 @@ public class MainApp extends JFrame {
 
 			mainTabbedPane.addTab("Add/Capture", null, getCapturePanel(), null);
 //			mainTabbedPane.addTab("Verify", null, getVerifyPanel());
-			mainTabbedPane.addTab("Verify", null, fs_verify.bringVerifyPanel(verifyPanel, verify_alBtns, getDCPVerify(), oprMed), null);
+			mainTabbedPane.addTab("Verify", null, member_fs.bringVerifyPanel(verifyPanel, verify_alBtns, getDCPVerify(), oprMed), null);
 			mainTabbedPane.addTab("Train", null, getTrainPanel(), null);
+			mainTabbedPane.addTab("Permanent Recognition", null, fs_permanent.bringPanel_permanentRecognition(permanentRecognitionPanel, verify_alBtns, member_design.bringDCP(), oprMed), null);
+//			mainTabbedPane.addTab("Permanent Recognition", icon_hand, member_fs.bringPanel_permanentRecognition(verifyPanel, verify_alBtns, getDCPVerify(), oprMed), null);
 
 			mainTabbedPane.addChangeListener(changeListener_tabs);
 			mainTabbedPane.setSelectedIndex(1);
@@ -388,6 +407,9 @@ public class MainApp extends JFrame {
 		}
 		return dcpDataEditor;
 	}
+	
+	
+
 
 	/**
 	 * This is the default constructor

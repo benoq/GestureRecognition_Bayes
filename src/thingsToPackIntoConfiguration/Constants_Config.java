@@ -14,9 +14,11 @@ public class Constants_Config {
 	
 	//sound
 	public static final String pathForSoundFile_yes = "C:\\Users\\BenG\\git\\hi\\AttemptAWT\\src\\sound\\yes.wav";
+	public static final String pathForSoundFile_no = "C:\\Users\\BenG\\Desktop\\eclipseWorkspaces\\AllHiProjects\\GestureRecognition_Bayes\\src\\sound\\no.wav";
 	public static final String pathForSoundFile_unbekannteGeste = "C:\\Users\\BenG\\git\\hi\\AttemptAWT\\src\\sound\\geste-wurde-nicht-interpretiert.mp3";
 	
 	//picture
 	public static final String pathForVisualFile_Hand = "C:\\Users\\BenG\\git\\hi\\AttemptAWT\\src\\visual\\gesture.png";
+	
 
 }

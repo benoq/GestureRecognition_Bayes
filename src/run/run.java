@@ -4,6 +4,8 @@ import com.gt.UI.MainApp;
 
 //import javafx.application.Platform;
 
+//import javafx.application.Platform;
+
 public class run {
 	
 	public static void main(String[] args) {

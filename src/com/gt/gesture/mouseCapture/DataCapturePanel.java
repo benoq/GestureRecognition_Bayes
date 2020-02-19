@@ -74,7 +74,7 @@ public class DataCapturePanel extends JPanel implements MouseMotionListener, Mou
 		for (int i = 0; i < pointListRecorded.getCurTime().length - 1; i++) {
 			Point tmpPt = pointListRecorded.getDrawPoint()[i];
 			double diffTime = pointListRecorded.getCurTime()[i + 1] - pointListRecorded.getCurTime()[i];
-			add((int) tmpPt.getX(), (int) tmpPt.getY(), pointListRecorded.getCurTime()[i]);
+			addSignalToSequence((int) tmpPt.getX(), (int) tmpPt.getY(), pointListRecorded.getCurTime()[i]);
 			try {
 				Thread.sleep((long) diffTime);
 			} catch (InterruptedException e) {
@@ -90,7 +90,7 @@ public class DataCapturePanel extends JPanel implements MouseMotionListener, Mou
 	 * @param x
 	 * @param y
 	 */
-	private void add(int x, int y, double curTime) {
+	private void addSignalToSequence(int x, int y, double curTime) {
 		rf_curTime.add(curTime);
 		rf_drawPoint.add(new Point(x, y));
 		this.paintImmediately(getBounds());
@@ -137,7 +137,7 @@ public class DataCapturePanel extends JPanel implements MouseMotionListener, Mou
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (drawingStarted) {
-			add(e.getX(), e.getY(), System.currentTimeMillis());
+			addSignalToSequence(e.getX(), e.getY(), System.currentTimeMillis());
 		}
 	}
 
